@@ -102,7 +102,13 @@ class ClearCacheCommand extends Command
                 $ri = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
                 foreach ( $ri as $file ) {
                     if ($file->isDir()) {
-                        rmdir($file);
+                        if ($this->checkIfDirectoryIsEmpty($file)) {
+                            rmdir($file);
+                        }
+                        else {
+                            $failures = true;
+                            $output->writeln(sprintf(\PHP_EOL . "Directory not empty: %s", $file));
+                        }
                     }
                     else {
                         if (is_writable($file)) {
@@ -156,4 +162,13 @@ class ClearCacheCommand extends Command
                 ]);
         }
     }
+
+
+    protected function checkIfDirectoryIsEmpty($dir) : ?bool
+    {
+        if (!is_readable($dir)) return null;
+        return (count(scandir($dir)) == 2);
+    }
+
+
 }
