@@ -87,18 +87,49 @@ class ClearCacheCommand extends Command
     protected function clearCacheDirectory($dir, $dryrun, $output)
     {
         $output->write(sprintf("Clear Cache Directory: '%s' ... ", $dir));
-        if (!is_dir($dir)) {
-            $msg = sprintf("Item '%s' is not a directory", $dir);
-            throw new \RuntimeException($msg);
-        }
-        if (!$dryrun) {
-            $di = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
-            $ri = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
-            foreach ( $ri as $file ) {
-                $file->isDir() ?  rmdir($file) : unlink($file);
+        try {
+            if (!is_dir($dir)) {
+                $msg = sprintf("Item '%s' is not a directory", $dir);
+                throw new \RuntimeException($msg);
             }
+            if (!is_dir($dir)) {
+                $msg = sprintf("Item '%s' is not a directory", $dir);
+                throw new \RuntimeException($msg);
+            }
+            $failures = false;
+            if (!$dryrun) {
+                $di = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
+                $ri = new \RecursiveIteratorIterator($di, \RecursiveIteratorIterator::CHILD_FIRST);
+                foreach ( $ri as $file ) {
+                    if ($file->isDir()) {
+                        rmdir($file);
+                    }
+                    else {
+                        if (is_writable($file)) {
+                            unlink($file);
+                        }
+                        else {
+                            $failures = true;
+                            $output->writeln(sprintf("Not writeable: %s", $file));
+                        }
+                    }
+                }
+            }
+            if (!$failures) {
+                $output->writeln("<fg=green>OK</>");
+            }
+            else {
+                $output->writeln("<fg=cyan>There were errors, please check file permissions.</>");
+            }
+
+        } catch (\Throwable $e) {
+            $io->newLine();
+            $io->error([
+                   get_class($e),
+                   $e->getMessage(),
+                   sprintf("Line %s in '%s'", $e->getLine(), $e->getFile())
+                ]);
         }
-        $output->writeln("<fg=green>OK</>");
     }
 
 
