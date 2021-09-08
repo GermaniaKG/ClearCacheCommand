@@ -66,7 +66,7 @@ class ClearCacheCommand extends Command
         // --------------------------------------
 
         foreach($this->cache_directories as $key => $dir) {
-            $this->clearCacheDirectory($dir, $dryrun, $output);
+            $this->clearCacheDirectory($dir, $dryrun, $output, $io);
         }
 
         // --------------------------------------
@@ -74,7 +74,7 @@ class ClearCacheCommand extends Command
         // --------------------------------------
 
         foreach($this->psr_cache_pools as $key => $cache_itempool) {
-            $this->clearPsrCacheItemPool($cache_itempool, $key, $dryrun, $output);
+            $this->clearPsrCacheItemPool($cache_itempool, $key, $dryrun, $output, $io);
         }
 
 
@@ -84,7 +84,7 @@ class ClearCacheCommand extends Command
 
 
 
-    protected function clearCacheDirectory($dir, $dryrun, $output)
+    protected function clearCacheDirectory($dir, $dryrun, $output, $io)
     {
         $output->write(sprintf("Clear Cache Directory: '%s' ... ", $dir));
         try {
@@ -134,7 +134,7 @@ class ClearCacheCommand extends Command
 
 
 
-    protected function clearPsrCacheItemPool($cacheitempool, $title, $dryrun, $output)
+    protected function clearPsrCacheItemPool($cacheitempool, $title, $dryrun, $output, $io)
     {
         $output->write(sprintf("Clear PSR Cache ItemPool: '%s' ... ", $title));
 
