@@ -110,7 +110,7 @@ class ClearCacheCommand extends Command
                         }
                         else {
                             $failures = true;
-                            $output->writeln(sprintf("Not writeable: %s", $file));
+                            $output->writeln(sprintf(\PHP_EOL . "Not writeable: %s", $file));
                         }
                     }
                 }
