@@ -92,10 +92,7 @@ class ClearCacheCommand extends Command
                 $msg = sprintf("Item '%s' is not a directory", $dir);
                 throw new \RuntimeException($msg);
             }
-            if (!is_dir($dir)) {
-                $msg = sprintf("Item '%s' is not a directory", $dir);
-                throw new \RuntimeException($msg);
-            }
+
             $failures = false;
             if (!$dryrun) {
                 $di = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
