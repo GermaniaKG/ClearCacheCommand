@@ -27,6 +27,10 @@ class ClearCacheCommand extends Command
 
 
 
+    /**
+     * @param string[] $cache_directories
+     * @param CacheItemPoolInterface[] $psr_cache_pools
+     */
     public function __construct(array $cache_directories, array $psr_cache_pools)
     {
         $this->psr_cache_pools = $psr_cache_pools;
@@ -37,7 +41,7 @@ class ClearCacheCommand extends Command
 
 
     // Define a description, help message and the input options and arguments:
-    protected function configure()
+    protected function configure() : void
     {
         $this
             // the short description shown while running "php bin/console list"
@@ -52,7 +56,7 @@ class ClearCacheCommand extends Command
 
 
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output) : int
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Clear caches');
@@ -84,7 +88,7 @@ class ClearCacheCommand extends Command
 
 
 
-    protected function clearCacheDirectory($dir, $dryrun, $output, $io)
+    protected function clearCacheDirectory(string $dir, bool $dryrun, OutputInterface $output, SymfonyStyle $io) : void
     {
         $output->write(sprintf("Clear Cache Directory: '%s' ... ", $dir));
         try {
@@ -137,7 +141,7 @@ class ClearCacheCommand extends Command
 
 
 
-    protected function clearPsrCacheItemPool($cacheitempool, $title, $dryrun, $output, $io)
+    protected function clearPsrCacheItemPool(CacheItemPoolInterface $cacheitempool, string $title, bool $dryrun, OutputInterface $output, SymfonyStyle $io) : void
     {
         $output->write(sprintf("Clear PSR Cache ItemPool: '%s' ... ", $title));
 
@@ -161,7 +165,7 @@ class ClearCacheCommand extends Command
     }
 
 
-    protected function checkIfDirectoryIsEmpty($dir) : ?bool
+    protected function checkIfDirectoryIsEmpty( string $dir) : ?bool
     {
         if (!is_readable($dir)) return null;
         return (count(scandir($dir)) == 2);
