@@ -1,6 +1,7 @@
 <h1 align="center">Germania KG · ClearCache</h1>
 
 <p align="center"><b>Symfony Console Command for clearing caches in our web apps.</b></p>
+[![Tests](https://github.com/GermaniaKG/ClearCacheCommand/actions/workflows/tests.yml/badge.svg)](https://github.com/GermaniaKG/ClearCacheCommand/actions/workflows/tests.yml)
 
 ## Installation
 
